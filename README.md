@@ -3,7 +3,7 @@
 The latest drawio release can be found there: https://github.com/jgraph/drawio-desktop/releases/
 
 # usage
-1. set function parameter as example:
+1. Set function parameter as example:
 include_objects_like => 'SOME_TABLE%'
 
 2. Copy result to clipboard
