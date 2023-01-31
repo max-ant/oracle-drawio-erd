@@ -1,5 +1,7 @@
 # oracle-drawio-erd
 
+Automatically create database ERD diagram from existing oracle tables using pl/sql function.
+
 The latest drawio release can be found there: https://github.com/jgraph/drawio-desktop/releases/
 
 # usage
