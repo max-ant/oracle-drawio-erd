@@ -1,9 +1,8 @@
-CREATE OR REPLACE FUNCTION drawio_erd(include_objects_like VARCHAR2 DEFAULT NULL,
+WITH FUNCTION drawio_erd(include_objects_like VARCHAR2 DEFAULT NULL,
                                       exclude_objects_like VARCHAR2 DEFAULT NULL,
                                       include_csv_list     VARCHAR2 DEFAULT NULL,
                                       exclude_csv_list     VARCHAR2 DEFAULT NULL,
-                                      IsCollapsed          VARCHAR2 DEFAULT NULL) RETURN CLOB AUTHID DEFINER IS
-
+                                      IsCollapsed          VARCHAR2 DEFAULT NULL) RETURN CLOB  IS
   --Configuration variables
   --Please also check set_config procedure
   l_Table_Caption_Height NUMBER := 20;
@@ -146,7 +145,7 @@ CREATE OR REPLACE FUNCTION drawio_erd(include_objects_like VARCHAR2 DEFAULT NULL
                        MxCell_MxGeometry_MxPoint_Y      NUMBER DEFAULT NULL) IS
     Lstr VARCHAR2(32000);
   BEGIN
-    --possible solution in case of encodinig issue (TODO):
+    --possible solution in case of encodinig issue:
     --dbms_xmlgen.convert(l_tab(rowidx).comm, dbms_xmlgen.ENTITY_encode);
     SELECT XMLSerialize(CONTENT(XMLELEMENT("mxCell",
                                             XMLATTRIBUTES(MxCell_id AS "id",
@@ -279,7 +278,7 @@ CREATE OR REPLACE FUNCTION drawio_erd(include_objects_like VARCHAR2 DEFAULT NULL
   --------------------------------------------------------------------
   FUNCTION get_Link_references_text(IntableName  VARCHAR2,
                                     InColumnName VARCHAR2) RETURN VARCHAR2 IS
-    --TODO чомусь вертає багато референсів коли референс іде по двох колонках одночасно
+    --TODO Sometime returns many references in case two columns are incluses in reference
     l_keys VARCHAR2(1000);
   BEGIN
     SELECT listagg(refcols, ',') WITHIN GROUP(ORDER BY refcols) comm
@@ -357,11 +356,13 @@ CREATE OR REPLACE FUNCTION drawio_erd(include_objects_like VARCHAR2 DEFAULT NULL
   --#######################################################################################################################
   --                                  Main function
   --#######################################################################################################################
-  /*(include_objects_like VARCHAR2 DEFAULT NULL,
+  /*
+  (include_objects_like VARCHAR2 DEFAULT NULL,
   exclude_objects_like VARCHAR2 DEFAULT NULL,
   include_csv_list     VARCHAR2 DEFAULT NULL,
   exclude_csv_list     VARCHAR2 DEFAULT NULL,
-  IsCollapsed          VARCHAR2 DEFAULT NULL) RETURN CLOB*/
+  IsCollapsed          VARCHAR2 DEFAULT NULL) RETURN CLOB
+  */
 BEGIN
   L_clob := NULL;
   set_config;
@@ -522,4 +523,4 @@ BEGIN
   add_document_footer;
   RETURN l_clob;
 END;
-/
+SELECT drawio_erd(include_objects_like => '%ACTION%') FROM dual
